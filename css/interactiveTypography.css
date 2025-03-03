@@ -1,0 +1,13 @@
+/* 网格布局：2 列 2 行，每个单元格保持 p5.js 原本的全屏尺寸 */
+.grid-container {
+  display: grid;
+  grid-template-columns: 50vw 50vw;  /* 每列 100vw */
+  grid-template-rows: 100vh 100vh;      /* 每行 100vh */
+}
+
+/* 确保每个 iframe 完全显示原本的全屏画布 */
+.grid-item iframe {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+}
