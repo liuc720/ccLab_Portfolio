@@ -1,0 +1,84 @@
+/* travel-quiz.css */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #fff1f0);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quiz-container {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 720px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.banner {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+h1, h2, h3 {
+  color: #333;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+p {
+  color: #555;
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: block;
+  margin: 1.5rem auto 0;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ee5253;
+}
+
+.hidden {
+  display: none;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+#question-container button {
+  margin: 0.5rem auto;
+  display: block;
+  width: 80%;
+}
+
+#destination-card {
+  background-color: #fff7f1;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+#destination-card img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}

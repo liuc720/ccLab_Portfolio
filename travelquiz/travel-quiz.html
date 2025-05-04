@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Where Should You Go Next?</title>
+  <link rel="stylesheet" href="travel-quiz.css" />
+</head>
+<body>
+  <div class="quiz-container">
+    <!-- Intro Section -->
+    <div id="intro" class="section">
+      <img src="cover.jpg" alt="travel banner" class="banner" />
+      <h1>Where Should You Go Next?</h1>
+      <p>Take this short quiz and let your vibe pick the next destination ✈️✨</p>
+      <button id="start-btn">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div id="quiz" class="section hidden">
+      <div id="question-container"></div>
+    </div>
+
+    <!-- Result Section -->
+    <div id="result" class="section hidden">
+      <h2>Your Perfect Destination Is:</h2>
+      <div id="destination-card">
+        <img id="result-img" src="" alt="Destination Image" />
+        <h3 id="result-name"></h3>
+        <p id="result-desc"></p>
+      </div>
+      <button id="restart-btn">Retake Quiz</button>
+    </div>
+  </div>
+
+  <!-- Inline JS -->
+  <script>
+    const startBtn = document.getElementById("start-btn");
+    const restartBtn = document.getElementById("restart-btn");
+    const introSection = document.getElementById("intro");
+    const quizSection = document.getElementById("quiz");
+    const resultSection = document.getElementById("result");
+    const questionContainer = document.getElementById("question-container");
+
+const questions = [
+  {
+    text: "Do you prefer nature or city culture?",
+    options: ["Nature and scenic landscapes", "Urban streets and city culture"],
+    weight: 2,
+    tagMap: [
+      ["Iceland", "Chiang Mai", "Cancun", "Bali", "Alaska"],
+      ["Shanghai", "Paris", "Dubai", "Sydney"]
+    ]
+  },
+  {
+    text: "What kind of transportation do you prefer?",
+    options: ["Road trip / Driving", "Train or bus", "Boat / Ferry"],
+    weight: 1,
+    tagMap: [
+      ["Alaska", "Turkey", "Morocco"],
+      ["Zurich", "Paris", "Tokyo"],
+      ["Maldives", "Venice", "Cancun"]
+    ]
+  },
+  {
+    text: "What’s your travel budget this time?",
+    options: ["Less than $1000", "$1000–$3000", "No limit!"],
+    weight: 2,
+    tagMap: [
+      ["Chiang Mai", "Turkey", "Morocco"],
+      ["Alaska", "Venice"],
+      ["Zurich", "Maldives"]
+    ]
+  },
+  {
+    text: "What kind of climate do you prefer?",
+    options: ["Warm and sunny (>25°C)", "Mild and comfortable (15–25°C)", "Cold and crisp (<15°C)"],
+    weight: 2,
+    tagMap: [
+      ["Bali", "Cancun", "Dubai", "Sydney", "Maldives"],
+      ["Turkey", "Paris", "Venice"],
+      ["Iceland", "Alaska", "Zurich", "Tokyo"]
+    ]
+  },
+  {
+    text: "How long do you want this trip to be?",
+    options: ["Weekend getaway (1–3 days)", "About a week", "Long adventure (12+ days)"],
+    weight: 1,
+    tagMap: [
+      ["Shanghai", "Zurich", "Venice"],
+      ["Tokyo", "Paris"],
+      ["Iceland", "Morocco"]
+    ]
+  },
+  {
+    text: "Do you prefer lively or peaceful destinations?",
+    options: ["Vibrant cities with nightlife", "Quiet and off-the-beaten-path places"],
+    weight: 1,
+    tagMap: [
+      ["Dubai", "Cancun", "Shanghai", "Sydney"],
+      ["Chiang Mai", "Zurich"]
+    ]
+  },
+  {
+    text: "Who are you traveling with?",
+    options: ["Solo", "With friends or partner", "Family trip"],
+    weight: 1,
+    tagMap: [
+      ["Iceland", "Tokyo"],
+      ["Bali", "Venice", "Maldives"],
+      ["Paris", "Sydney", "Turkey"]
+    ]
+  },
+  {
+    text: "Do you have any visa limitations?",
+    options: ["Yes (visa-free or visa-on-arrival only)", "No (I can apply for visa anywhere)"],
+    weight: 1,
+    tagMap: [
+      ["Chiang Mai", "Turkey"],
+      ["Iceland", "Tokyo"]
+    ]
+  }
+];
+
+const destinationDescriptions = {
+  "Iceland": "Explore glaciers, waterfalls and the northern lights in one of the most surreal places on Earth.",
+  "Tokyo": "A high-energy city with a mix of tradition, technology, and world-class cuisine.",
+  "Shanghai": "China’s bustling metropolis full of futuristic skyscrapers and rich history.",
+  "Alaska": "Vast wilderness, stunning mountains, and a paradise for adventure lovers.",
+  "Turkey": "Where East meets West – a country rich in culture, landscapes, and food.",
+  "Chiang Mai": "A peaceful blend of temples, jungles and local markets in northern Thailand.",
+  "Venice": "Get lost in the canals and charm of this floating Italian city.",
+  "Paris": "Romantic, stylish, and full of art – the City of Light never disappoints.",
+  "Zurich": "Swiss precision meets serene lakeside living and Alpine views.",
+  "Cancun": "White sand beaches, turquoise water and party energy – perfect for fun in the sun.",
+  "Bali": "Tropical paradise with lush landscapes, beach clubs and spiritual retreats.",
+  "Morocco": "Wander vibrant souks, ride camels in the desert, and explore ancient medinas.",
+  "Sydney": "Sun, surf, and skyline – Australia’s iconic harbor city.",
+  "Maldives": "Overwater villas, crystal-clear lagoons and ultimate relaxation.",
+  "Dubai": "Luxury, skyscrapers and desert adventures await in this futuristic city."
+};
+
+let currentQuestion = 0;
+const scores = {};
+
+startBtn.addEventListener("click", startQuiz);
+restartBtn.addEventListener("click", restartQuiz);
+
+function startQuiz() {
+  introSection.classList.add("hidden");
+  quizSection.classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  questionContainer.innerHTML = "";
+  if (currentQuestion < questions.length) {
+    const q = questions[currentQuestion];
+    const title = document.createElement("h3");
+    title.textContent = q.text;
+    questionContainer.appendChild(title);
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.onclick = () => handleAnswer(i);
+      questionContainer.appendChild(btn);
+    });
+  } else {
+    calculateResult();
+  }
+}
+
+function handleAnswer(index) {
+  const q = questions[currentQuestion];
+  const tags = q.tagMap[index];
+  tags.forEach(tag => {
+    scores[tag] = (scores[tag] || 0) + q.weight;
+  });
+  currentQuestion++;
+  showQuestion();
+}
+
+function calculateResult() {
+  quizSection.classList.add("hidden");
+  resultSection.classList.remove("hidden");
+  let best = null;
+  let max = -1;
+  for (const place in scores) {
+    if (scores[place] > max) {
+      max = scores[place];
+      best = place;
+    }
+  }
+  document.getElementById("result-name").textContent = best;
+  document.getElementById("result-img").src = `images/${best}.jpg`;
+  document.getElementById("result-desc").textContent = destinationDescriptions[best] || "Time to explore somewhere new!";
+}
+
+function restartQuiz() {
+  currentQuestion = 0;
+  for (let key in scores) delete scores[key];
+  quizSection.classList.add("hidden");
+  resultSection.classList.add("hidden");
+  introSection.classList.remove("hidden");
+}
+
+  </script>
+</body>
+</html>
