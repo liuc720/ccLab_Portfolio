@@ -1,0 +1,15 @@
+/* 容器改为 flex，水平居中 */
+.grid-container {
+    display: flex;
+    justify-content: center;
+    /* 如果想两画布间留点空隙，可加 gap */
+    gap: 20px;
+  }
+  
+  /* 每个子项直接撑占 50vw 宽度、100vh 高度 */
+  .grid-item iframe {
+    width: 50vw;
+    height: 100vh;
+    border: none;
+  }
+  
